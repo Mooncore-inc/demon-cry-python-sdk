@@ -1,5 +1,5 @@
 import httpx
-from .models import OSINTRequest, OSINTResponse
+from .models import OSINTRequest, OSINTResponse, HealthResponse
 
 class DemonCryClient:
     def __init__(self, base_url: str):
@@ -14,6 +14,13 @@ class DemonCryClient:
         )
         response.raise_for_status()
         return OSINTResponse.model_validate(response.json())
+
+    async def health(self) -> HealthResponse:
+        response = await self._client.get(
+            f"{self.base_url}/api/health"
+        )
+        response.raise_for_status()
+        return HealthResponse.model_validate(response.json())
 
     async def aclose(self):
         await self._client.aclose()
