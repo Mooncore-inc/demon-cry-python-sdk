@@ -1,6 +1,6 @@
 import httpx
 from tenacity import retry, stop_after_attempt, wait_exponential
-from .exceptions import APIError, RateLimitError
+from .exceptions import APIError, RateLimitError, UnauthorizedError
 
 class HTTPClient:
     def __init__(self, base_url: str, api_key: str | None, timeout: float, max_retries: int):
@@ -33,6 +33,8 @@ class HTTPClient:
     def _handle_errors(self, response: httpx.Response):
         if response.status_code == 429:
             raise RateLimitError(429, "Rate limit exceeded")
+        if response.status_code == 401:
+            raise UnauthorizedError(401, "Invalid or missing API key")
         if response.status_code >= 400:
             raise APIError(response.status_code, response.text)
 

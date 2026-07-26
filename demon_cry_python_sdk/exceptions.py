@@ -8,6 +8,9 @@ class APIError(DemonCryError):
         self.message = message
         super().__init__(f"[{status_code}] {message}")
 
+class UnauthorizedError(DemonCryError):
+    pass
+
 class TimeoutError(DemonCryError):
     pass
 
