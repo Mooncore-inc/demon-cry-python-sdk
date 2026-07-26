@@ -1,29 +1,31 @@
-import httpx
-from .models import OSINTRequest, OSINTResponse, HealthResponse
+from ._http import HTTPClient
+from .models import HealthResponse
+from .resources import InvestigationsResource
 
 class DemonCryClient:
-    def __init__(self, base_url: str):
-        self.base_url = base_url.rstrip("/")
-        self._client = httpx.AsyncClient()
-
-    async def investigate(self, target: str, max_tokens: int = 15000) -> OSINTResponse:
-        request = OSINTRequest(target=target, max_tokens=max_tokens)
-        response = await self._client.post(
-            f"{self.base_url}/api/investigate",
-            json=request.model_dump()
+    def __init__(
+        self,
+        base_url: str,
+        api_key: str | None = None,
+        timeout: float = 60.0,
+        max_retries: int = 3
+    ):
+        self._http = HTTPClient(
+            base_url=base_url,
+            api_key=api_key,
+            timeout=timeout,
+            max_retries=max_retries
         )
-        response.raise_for_status()
-        return OSINTResponse.model_validate(response.json())
+        
+        # Resources
+        self.investigations = InvestigationsResource(self._http)
 
     async def health(self) -> HealthResponse:
-        response = await self._client.get(
-            f"{self.base_url}/api/health"
-        )
-        response.raise_for_status()
-        return HealthResponse.model_validate(response.json())
+        response = await self._http.get("/api/health")
+        return HealthResponse.model_validate(response)
 
     async def aclose(self):
-        await self._client.aclose()
+        await self._http.aclose()
 
     async def __aenter__(self):
         return self

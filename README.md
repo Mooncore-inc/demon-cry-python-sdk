@@ -32,45 +32,14 @@ from demon_cry_python_sdk import DemonCryClient
 
 
 async def main():
-    async with DemonCryClient("http://localhost:8000") as client:
-        result = await client.investigate("цель")
+    async with DemonCryClient(base_url="http://localhost:8000") as client:
+        result = await client.investigations.create(target="fazzyt", max_tokens=15000)
         print(result.result)
 
 
 asyncio.run(main())
 ```
 
----
-
-## 📖 API Reference
-
-### `DemonCryClient(base_url: str)`
-
-Клиент для взаимодействия с Demon Cry API.
-
-| Метод | Параметры | Возврат | Описание |
-|-------|-----------|---------|----------|
-| `investigate()` | `target: str`, `max_tokens: int = 15000` | `OSINTResponse` | Запуск расследования |
-| `health()` | — | `HealthResponse` | Проверка состояния сервера |
-| `aclose()` | — | `None` | Закрытие соединения |
-
-### `OSINTResponse`
-
-| Поле | Тип | Описание |
-|------|-----|----------|
-| `status` | `str` | Статус расследования |
-| `result` | `str \| None` | Результат расследования |
-| `tools_used` | `list[dict]` | Использованные инструменты |
-| `total_tokens` | `int` | Количество использованных токенов |
-
-### `HealthResponse`
-
-| Поле | Тип | Описание |
-|------|-----|----------|
-| `status` | `str` | Статус сервера |
-| `latency_ms` | `int` | Задержка ответа модели в миллисекундах |
-
----
 
 ## 📄 Лицензия
 
