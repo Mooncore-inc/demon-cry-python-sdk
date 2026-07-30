@@ -1,8 +1,10 @@
 from ._http import HTTPClient
-from .models import HealthResponse
-from .resources import InvestigationsResource
+from .resources import InvestigationsResource, HealthResource
 
 class DemonCryClient:
+    """
+    Client for interacting with the DEMON CRY API.
+    """
     def __init__(
         self,
         base_url: str,
@@ -19,10 +21,7 @@ class DemonCryClient:
         
         # Resources
         self.investigations = InvestigationsResource(self._http)
-
-    async def health(self) -> HealthResponse:
-        response = await self._http.get("/api/health")
-        return HealthResponse.model_validate(response)
+        self.health = HealthResource(self._http)
 
     async def aclose(self):
         await self._http.aclose()
