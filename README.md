@@ -33,7 +33,7 @@ from demon_cry_python_sdk import DemonCryClient
 
 async def main():
     async with DemonCryClient(base_url="http://localhost:8000") as client:
-        result = await client.investigations.create(target="fazzyt", max_tokens=15000)
+        result = await client.investigations.create(target="fazzyt")
         print(result.result)
 
 
