@@ -19,7 +19,7 @@ Python SDK для [Demon Cry](https://github.com/Mooncore-inc/demon-cry) — а�
 ## 📦 Установка
 
 ```bash
-pip install git+https://github.com/Mooncore-inc/demon-cry-python-sdk.git
+pip install demon-cry-python-sdk
 ```
 
 ---
