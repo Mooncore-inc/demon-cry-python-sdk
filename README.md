@@ -40,6 +40,35 @@ async def main():
 asyncio.run(main())
 ```
 
+---
+
+## 💰 Расчёт стоимости запроса
+
+Тарифы взяты из [документации DeepSeek](https://api-docs.deepseek.com/quick_start/pricing/).
+
+```python
+result = await client.investigations.create(target="example.com")
+
+tokens = result.tokens
+
+# Тарифы DeepSeek (за 1 токен)
+INPUT_COST_PER_TOKEN = 0.14 / 1_000_000       # cache miss
+INPUT_CACHED_COST = 0.0028 / 1_000_000        # cache hit
+OUTPUT_COST_PER_TOKEN = 0.28 / 1_000_000
+
+input_cost = tokens.cache_hit * INPUT_CACHED_COST + tokens.cache_miss * INPUT_COST_PER_TOKEN
+output_cost = tokens.completion * OUTPUT_COST_PER_TOKEN
+total_cost = input_cost + output_cost
+
+print(f"Всего токенов: {tokens.total}")
+print(f"  Prompt:      {tokens.prompt}")
+print(f"  Completion:  {tokens.completion}")
+print(f"  Cache hit:   {tokens.cache_hit}")
+print(f"  Cache miss:  {tokens.cache_miss}")
+print(f"Стоимость:     ${total_cost:.6f}")
+```
+
+---
 
 ## 📄 Лицензия
 
