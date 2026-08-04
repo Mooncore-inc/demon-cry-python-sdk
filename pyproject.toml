@@ -25,3 +25,7 @@ pattern = "^v(?P<base>\\d+\\.\\d+\\.\\d+)(-(?P<stage>[a-zA-Z]+)\\.?(?P<revision>
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0", "poetry-dynamic-versioning>=1.0.0,<2.0.0"]
 build-backend = "poetry_dynamic_versioning.backend"
+[dependency-groups]
+dev = [
+    "pre-commit (>=4.6.1,<5.0.0)"
+]
